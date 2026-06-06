@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from pathlib import Path
 
 # ==================================
 # PAGE CONFIG
@@ -107,7 +108,8 @@ hr{
 # LOAD DATA
 # ==================================
 
-df = pd.read_csv("Data/WA_Fn-UseC_-HR-Employee-Attrition.csv")
+DATA_PATH = Path(__file__).parent / "Data" / "WA_Fn-UseC_-HR-Employee-Attrition.csv"
+df = pd.read_csv(DATA_PATH)
 
 # ==================================
 # SIDEBAR FILTERS
@@ -179,17 +181,9 @@ employees_left = len(
     filtered_df[filtered_df["Attrition"]=="Yes"]
 )
 
-attrition_rate = round(
-    (employees_left/total_emp)*100,2
-)
-
-avg_income = round(
-    filtered_df["MonthlyIncome"].mean(),0
-)
-
-avg_tenure = round(
-    filtered_df["YearsAtCompany"].mean(),1
-)
+attrition_rate = round((employees_left / total_emp) * 100, 2) if total_emp else 0
+avg_income = round(filtered_df["MonthlyIncome"].mean(), 0) if total_emp else 0
+avg_tenure = round(filtered_df["YearsAtCompany"].mean(), 1) if total_emp else 0
 
 c1,c2,c3,c4,c5 = st.columns(5)
 
